@@ -1,5 +1,6 @@
 const cols = document.querySelectorAll('.col');
 
+// generata random colors with tapping space button
 document.addEventListener('keydown', event => {
     event.preventDefault();
     if (event.code.toLocaleLowerCase() == 'space') {
@@ -7,6 +8,8 @@ document.addEventListener('keydown', event => {
     }
 })
 
+// copy color when clicking on color code
+// lock or unlock color whtn clicking on lock icon
 document.addEventListener('click', event => {
     const type = event.target.dataset.type;
 
@@ -23,7 +26,12 @@ document.addEventListener('click', event => {
     }
 })
 
+// check colors for hash
+// if hash exist => set color scheme from hash
+// if hash not exist => generate random colors
+// and sat relative hash
 function setRandomColors(isInitial) {
+
     const colors = isInitial ? getColorsFromHash() : [];
     cols.forEach((col, index) => {
         const isLocked = col.querySelector('i').classList.contains('fa-lock');
@@ -55,26 +63,11 @@ function setRandomColors(isInitial) {
     updateColorsHash(colors);
 }
 
-function generateRandColor() {
-    // RGB 
-    // #FF0000
-    // #00FF00
-    // #0000FF
-
-    const hexCodes = '0123456789ABCDEF';
-    let color = '';
-
-    for (let i = 0; i < 6; i++) {
-        color += hexCodes[Math.floor(Math.random() * hexCodes.length)];
-    }
-
-    return '#' + color;
-}
-
 function setTextColor(text, color) {
     const luminance = chroma(color).luminance();
     text.style.color = luminance > 0.5 ? 'black' : 'white';
 }
+
 
 function copyToClickboard(text) {
     return navigator.clipboard.writeText(text);
@@ -84,6 +77,8 @@ function updateColorsHash(colors = []) {
     document.location.hash = colors.map(color => color.toString().substring(1)).join('-');
 }
 
+// get color from hash if exist 
+// else return empty array
 function getColorsFromHash() {
     if (document.location.hash.length > 1) {
         return document.location.hash.substring(1).split('-').map(color => "#" + color);
